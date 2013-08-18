@@ -31,21 +31,6 @@ namespace WyldeStartupManager
         public MainWindow()
         {
             InitializeComponent();
-            systemButtons = new DoubleAnimation();
-            systemButtons.From = 0;
-            systemButtons.To = 1;
-            systemButtons.Duration = new Duration(TimeSpan.FromSeconds(.5));
-            systemButtons.FillBehavior = FillBehavior.HoldEnd;
-            closeStoryBoard = new Storyboard();
-            Storyboard.SetTarget(systemButtons, closeColorBox);
-            maximizeStoryBoard = new Storyboard();
-            Storyboard.SetTarget(systemButtons, maximizeButton);
-            minimizeStortBoard = new Storyboard();
-            Storyboard.SetTarget(systemButtons, minimizeColorBox);
-            Storyboard.SetTargetProperty(systemButtons, new PropertyPath(TextBlock.OpacityProperty));
-            maximizeStoryBoard.Children.Add(systemButtons);
-            minimizeStortBoard.Children.Add(systemButtons);
-            closeStoryBoard.Children.Add(systemButtons);
         }
 
         private void dragBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -81,21 +66,15 @@ namespace WyldeStartupManager
         {
             if (sender == closeButton)
             {
-                systemButtons.From = 0;
-                systemButtons.To = 1;
-                closeStoryBoard.Begin();
+                closeColorBox.Opacity = .2;
             }
             else if (sender == maximizeButton)
             {
-                systemButtons.From = 0;
-                systemButtons.To = 1;
-                maximizeStoryBoard.Begin();
+                maximizeColorBox.Opacity = .2;
             }
             else if (sender == minimizeButton)
             {
-                systemButtons.From = 0;
-                systemButtons.To = 1;
-                minimizeStortBoard.Begin();
+                minimizeColorBox.Opacity = .2;
             }
         }
 
@@ -103,21 +82,15 @@ namespace WyldeStartupManager
         {
             if (sender == closeButton)
             {
-                systemButtons.From = 1;
-                systemButtons.To = 0;
-                closeStoryBoard.Begin();
+                closeColorBox.Opacity = 0;
             }
             else if (sender == maximizeButton)
             {
-                systemButtons.From = 1;
-                systemButtons.To = 0;
-                maximizeStoryBoard.Begin();
+                maximizeColorBox.Opacity = 0;
             }
             else if (sender == minimizeButton)
             {
-                systemButtons.From = 1;
-                systemButtons.To = 0;
-                minimizeStortBoard.Begin();
+                minimizeColorBox.Opacity = 0;
             }
         }
     }
