@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,16 +22,25 @@ namespace WyldeStartupManager
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private Storyboard closeStoryBoard;
-        //private Storyboard closeStoryBoardLeave;
-        private Storyboard maximizeStoryBoard;
-        private Storyboard minimizeStortBoard;
-        private DoubleAnimation systemButtons;
-
         public MainWindow()
         {
             InitializeComponent();
+
+            PopulateStartupProgramsList();
+        }
+
+        private void PopulateStartupProgramsList()
+        {
+            RegistryKey key;
+            key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", false);
+            foreach (string name in key.GetValueNames())
+            {
+                try
+                {
+                    startupPrograms.Items.Add(name);
+                }
+                catch (Exception) { }
+            }
         }
 
         private void dragBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
