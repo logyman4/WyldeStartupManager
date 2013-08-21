@@ -21,7 +21,7 @@ namespace WyldeStartupManager
         public MainWindow()
         {
             InitializeComponent();
-            
+            this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             PopulateStartupProgramsList();
         }
 
