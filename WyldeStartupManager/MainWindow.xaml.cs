@@ -43,7 +43,7 @@ namespace WyldeStartupManager
                         Name = name, 
                         Publisher = "Publisher",
                         Key = "HKLM::Run",
-                        FilePath = key.GetValue(name).ToString()
+                        FilePath = key.GetValue(name).ToString()[0] == '"' ? key.GetValue(name).ToString().Split('"')[1] : key.GetValue(name).ToString()
                     };  
                     startupPrograms.Items.Add(lvi);
                 }
@@ -61,7 +61,7 @@ namespace WyldeStartupManager
                         Name = name,
                         Publisher = "Publisher",
                         Key = "HKLM::RunOnce",
-                        FilePath = key.GetValue(name).ToString()
+                        FilePath = key.GetValue(name).ToString()[0] == '"' ? key.GetValue(name).ToString().Split('"')[1] : key.GetValue(name).ToString()
                     };
                     startupPrograms.Items.Add(lvi);
                 }
@@ -79,7 +79,7 @@ namespace WyldeStartupManager
                         Name = name,
                         Publisher = "Publisher",
                         Key = "HKCU::Run",
-                        FilePath = key.GetValue(name).ToString()
+                        FilePath = key.GetValue(name).ToString()[0] == '"' ? key.GetValue(name).ToString().Split('"')[1] : key.GetValue(name).ToString()
                     };
                     startupPrograms.Items.Add(lvi);
                 }

@@ -13,16 +13,16 @@
         </Border.Effect>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="100*" />
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="8" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="10" />
+                <RowDefinition Height="8" />
                 <RowDefinition Height="11" />
                 <RowDefinition Height="50" />
                 <RowDefinition />
-                <RowDefinition Height="10" />
+                <RowDefinition Height="8" />
             </Grid.RowDefinitions>
             <TextBlock x:Name="dragBar" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="dragBar_MouseLeftButtonDown" IsHitTestVisible="True" Background="White" />
             <TextBlock x:Name="closeColorBox" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="1" Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.RowSpan="2" Background="Gray" Width="30" Height="25" Opacity="0"/>
