@@ -9,11 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WyldeStartupManager
 {
@@ -25,22 +21,71 @@ namespace WyldeStartupManager
         public MainWindow()
         {
             InitializeComponent();
-
+            
             PopulateStartupProgramsList();
         }
 
         private void PopulateStartupProgramsList()
         {
+            if (startupPrograms.Items.Count > 0)
+            {
+                startupPrograms.Items.Clear();
+            }
             RegistryKey key;
             key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", false);
             foreach (string name in key.GetValueNames())
             {
                 try
                 {
-                    startupPrograms.Items.Add(name);
+                    LVI lvi = new LVI
+                    {
+                        Enabled = "Yes",
+                        Name = name, 
+                        Publisher = "Publisher",
+                        Key = "HKLM::Run",
+                        FilePath = key.GetValue(name).ToString()
+                    };  
+                    startupPrograms.Items.Add(lvi);
                 }
                 catch (Exception) { }
             }
+            key.Close();
+            key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce", false);
+            foreach (string name in key.GetValueNames())
+            {
+                try
+                {
+                    LVI lvi = new LVI
+                    {
+                        Enabled = "Yes",
+                        Name = name,
+                        Publisher = "Publisher",
+                        Key = "HKLM::RunOnce",
+                        FilePath = key.GetValue(name).ToString()
+                    };
+                    startupPrograms.Items.Add(lvi);
+                }
+                catch (Exception) { }
+            }
+            key.Close();
+            key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", false);
+            foreach (string name in key.GetValueNames())
+            {
+                try
+                {
+                    LVI lvi = new LVI
+                    {
+                        Enabled = "Yes",
+                        Name = name,
+                        Publisher = "Publisher",
+                        Key = "HKCU::Run",
+                        FilePath = key.GetValue(name).ToString()
+                    };
+                    startupPrograms.Items.Add(lvi);
+                }
+                catch (Exception) { }
+            }
+            key.Close();
         }
 
         private void dragBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -103,5 +148,14 @@ namespace WyldeStartupManager
                 minimizeColorBox.Opacity = 0;
             }
         }
+    }
+
+    public class LVI
+    {
+        public string Enabled { get; set; }
+        public string Name { get; set; }
+        public string Publisher { get; set; }
+        public string Key { get; set; }
+        public string FilePath { get; set; }
     }
 }
