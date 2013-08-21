@@ -1,7 +1,13 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,11 +46,36 @@ namespace WyldeStartupManager
                     LVI lvi = new LVI
                     {
                         Enabled = "Yes",
-                        Name = name, 
-                        Publisher = "Publisher",
+                        Name = name,
+                        Publisher = "publisher",
                         Key = "HKLM::Run",
                         FilePath = key.GetValue(name).ToString()[0] == '"' ? key.GetValue(name).ToString().Split('"')[1] : key.GetValue(name).ToString()
-                    };  
+                    };
+                    try
+                    {
+                        RunspaceConfiguration runspaceConfiguration = RunspaceConfiguration.Create();
+                        Runspace runspace = RunspaceFactory.CreateRunspace(runspaceConfiguration);
+                        runspace.Open();
+
+                        Pipeline pipeline = runspace.CreatePipeline();
+                        pipeline.Commands.AddScript("Get-AuthenticodeSignature \"" + lvi.FilePath + "\"");
+
+                        Collection<PSObject> results = pipeline.Invoke();
+                        runspace.Close();
+                        Signature signature = results[0].BaseObject as Signature;
+                        string[] temp = signature.SignerCertificate.Subject.Split('=');
+                        for (int i = 1; i < temp.Length; i++)
+                        {
+                            if (temp[i - 1].Substring(temp[i - 1].Length - 1) == "O")
+                            {
+                                lvi.Publisher = temp[i].ToCharArray()[0] == '"' ? temp[i].Split('"')[1] : temp[i];
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Error when trying to check if file is signed:" + lvi.FilePath + " --> " + e.Message);
+                    }
                     startupPrograms.Items.Add(lvi);
                 }
                 catch (Exception) { }
@@ -59,10 +90,35 @@ namespace WyldeStartupManager
                     {
                         Enabled = "Yes",
                         Name = name,
-                        Publisher = "Publisher",
+                        Publisher = "",
                         Key = "HKLM::RunOnce",
                         FilePath = key.GetValue(name).ToString()[0] == '"' ? key.GetValue(name).ToString().Split('"')[1] : key.GetValue(name).ToString()
                     };
+                    try
+                    {
+                        RunspaceConfiguration runspaceConfiguration = RunspaceConfiguration.Create();
+                        Runspace runspace = RunspaceFactory.CreateRunspace(runspaceConfiguration);
+                        runspace.Open();
+
+                        Pipeline pipeline = runspace.CreatePipeline();
+                        pipeline.Commands.AddScript("Get-AuthenticodeSignature \"" + lvi.FilePath + "\"");
+
+                        Collection<PSObject> results = pipeline.Invoke();
+                        runspace.Close();
+                        Signature signature = results[0].BaseObject as Signature;
+                        string[] temp = signature.SignerCertificate.Subject.Split('=');
+                        for (int i = 1; i < temp.Length; i++)
+                        {
+                            if (temp[i - 1].Substring(temp[i - 1].Length - 1) == "O")
+                            {
+                                lvi.Publisher = temp[i].ToCharArray()[0] == '"' ? temp[i].Split('"')[1] : temp[i];
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Error when trying to check if file is signed:" + lvi.FilePath + " --> " + e.Message);
+                    }
                     startupPrograms.Items.Add(lvi);
                 }
                 catch (Exception) { }
@@ -77,10 +133,35 @@ namespace WyldeStartupManager
                     {
                         Enabled = "Yes",
                         Name = name,
-                        Publisher = "Publisher",
+                        Publisher = "",
                         Key = "HKCU::Run",
                         FilePath = key.GetValue(name).ToString()[0] == '"' ? key.GetValue(name).ToString().Split('"')[1] : key.GetValue(name).ToString()
                     };
+                    try
+                    {
+                        RunspaceConfiguration runspaceConfiguration = RunspaceConfiguration.Create();
+                        Runspace runspace = RunspaceFactory.CreateRunspace(runspaceConfiguration);
+                        runspace.Open();
+
+                        Pipeline pipeline = runspace.CreatePipeline();
+                        pipeline.Commands.AddScript("Get-AuthenticodeSignature \"" + lvi.FilePath + "\"");
+
+                        Collection<PSObject> results = pipeline.Invoke();
+                        runspace.Close();
+                        Signature signature = results[0].BaseObject as Signature;
+                        string[] temp = signature.SignerCertificate.Subject.Split('=');
+                        for (int i = 1; i < temp.Length; i++)
+                        {
+                            if (temp[i - 1].Substring(temp[i - 1].Length - 1) == "O")
+                            {
+                                lvi.Publisher = temp[i].ToCharArray()[0] == '"' ? temp[i].Split('"')[1] : temp[i];
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Error when trying to check if file is signed:" + lvi.FilePath + " --> " + e.Message);
+                    }
                     startupPrograms.Items.Add(lvi);
                 }
                 catch (Exception) { }
